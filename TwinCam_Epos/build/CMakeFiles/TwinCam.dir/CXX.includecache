@@ -1,0 +1,46 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/tristar/MyWork-NX4_6/TwinCam_Epos/Definitions.h
+
+/home/tristar/MyWork-NX4_6/TwinCam_Epos/TwinCamEpos.cpp
+iostream
+-
+Definitions.h
+/home/tristar/MyWork-NX4_6/TwinCam_Epos/Definitions.h
+string.h
+-
+sstream
+-
+unistd.h
+-
+getopt.h
+-
+stdlib.h
+-
+stdio.h
+-
+list
+-
+math.h
+-
+cmath
+-
+sys/types.h
+-
+unistd.h
+-
+stdio.h
+-
+sys/times.h
+-
+sys/time.h
+-
+boost/python.hpp
+-
+

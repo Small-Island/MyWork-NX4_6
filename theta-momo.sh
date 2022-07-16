@@ -1,0 +1,12 @@
+#!/bin/bash
+sleep 3s
+cd /home/tristar/MyWork-NX4_6
+./local_webrtc_momo.run
+sleep 3s;
+./twincam-i2c.py &
+sleep 10s
+/home/tristar/MyWork-NX4_6/AutoRun_theta_momo.py
+sleep 3s
+/home/tristar/MyWork-NX4_6/THETA_Cameras/camera0/gst_loopback &
+sleep 3s
+./momo-2022.2.0_ubuntu-18.04_armv8_jetson_xavier/momo --hw-mjpeg-decoder=false --resolution 4K --video-device /dev/video0 sora --signaling-url wss://sora.ikeilabsora.0am.jp/signaling --channel-id mobile-twincam-right --multistream 1 --role sendonly --video-codec-type H264 --video-bit-rate 15000

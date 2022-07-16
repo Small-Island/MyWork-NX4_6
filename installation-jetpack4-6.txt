@@ -1,0 +1,271 @@
+#############
+Installation for NX Jetpack4.6
+
+#############
+https://developer.nvidia.com/embedded/jetpack
+NVIDIA L4T provides the bootloader, Linux kernel 4.9
+JetPack 4.6 includes L4T 32.6.1
+
+---------------
+sudo apt update
+sudo apt-get update
+sudo apt-get upgrade
+(automatically restart Docker: Yes)
+----------------------------
+#Japanese Input
+sudo apt install ibus-mozc
+reboot
+
+-----------------------------
+
+$ sudo sh -c 'echo 127 > /sys/devices/pwm-fan/target_pwm'
+
+#Fan
+#https://dev.classmethod.jp/articles/mediapipe-install-on-jetson-xavier-nx-with-gpu/
+sudo sh -c 'echo 127 > /sys/devices/pwm-fan/target_pwm'
+
+#start fan when reboot with rc.local file
+#https://www.programmersought.com/article/28658185754/
+sudo chmod 777 /sys/devices/pwm-fan/target_pwm
+sudo ln -fs /lib/systemd/system/rc-local.service /etc/systemd/system/rc-local.service
+cd /lib/systemd/system
+ls -lh
+sudo gedit rc.local.service
+#Add [Install field] at the end,
+[Install]
+WantedBy=multi-user.target
+Alias=rc-local.service
+
+sudo touch /etc/rc.local
+sudo chmod 777 /etc/rc.local
+sudo gedit /etc/rc.local
+#put the follow codes in rc.local file
+#!/bin/sh -e
+sleep 5s
+sh -c 'echo 127 > /sys/devices/pwm-fan/target_pwm'
+exit 0
+---------------------------
+
+v4l2-ctl --list-devices
+sudo apt-get install v4l-utils
+
+---------------------------
+
+##Theta install
+##https://codetricity.github.io/theta-linux/
+
+sudo apt install libjpeg-dev
+
+##Before installing theta, you should install libptp2.
+##First, Download from https://sourceforge.net/projects/libptp/files/latest/download
+##Second, extract libptp2-1.2.0.tar.gz
+##Thrid, moving to libptp2-1.2.0 dir and do following command in your terminal
+./configure
+make
+sudo make install
+sudo lin -s /usr/local/lib/libptp2.so.1.1.5 /usr/lib/libptp2.so.1
+
+git clone https://github.com/ricohapi/libuvc-theta.git
+sudo apt install libjpeg-dev
+cd libuvc-theta
+mkdir build
+cd build
+cmake ..
+make
+sudo make install
+
+cd../..
+
+git clone https://github.com/ricohapi/libuvc-theta-sample.git
+cd libuvc-theta-sample/gst
+##modify gst_viewer.c
+
+	if (strcmp(cmd_name, "gst_loopback") == 0)
+		pipe_proc = "decodebin ! autovideoconvert ! "
+			"video/x-raw,format=I420 ! identity drop-allocation=true !"
+			"v4l2sink device=/dev/video0 sync=false";
+	else
+		//pipe_proc = " decodebin ! autovideosink sync=false";
+		pipe_proc ="nvv4l2decoder ! nv3dsink sync=false";
+
+make
+
+run gst_viewer:
+
+if there is an error of cannot find libuvc.so....
+##copy files libuvc* in /usr/local/lib to usr/lib
+sudo /sbin/ldconfig -v
+or
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+#in  /etc/ld.so.conf.d
+#add
+#libuvc.conf  <- content=   /usr/local/lib
+-----------------------
+for
+gst_loopback to run
+
+sudo apt install v4l2loopback-utils
+sudo modprobe v4l2loopback
+
+then gst_loopback --> OK!!
+-----------------------------------
+run v4l2loopback when start ubuntu
+##https://sites.google.com/site/jetsontricks/xavier1
+sudo sh -c 'echo options v4l2loopback devices=2 video_nr=0,1 card_label=\"VCam01,VCam02\" exclusive_caps=1,1 > /etc/modprobe.d/v4l2loopback.conf'
+sudo sh -c 'echo v4l2loopback > /etc/modules'
+----------------------------------
+
+Run momo sora
+/home/tristar/MyWork/momo-2021.6.0_ubuntu-18.04_armv8_jetson_xavier/momo
+--hw-mjpeg-decoder=false --resolution 4K --video-device /dev/video0
+sora --signaling-url wss://sora.ikeilabsora.0am.jp/signaling
+--channel-id rabbit-go@twincamleft --role sendonly --video-codec-type
+H264 --video-bit-rate 15000
+
+---------------------------------
+
+for jtop:
+sudo apt install python-pip
+sudo -H pip install jetson-stats
+
+sudo jtop
+((sudo systemctl restart jetson_stats.service ???  <-- Fan or rc.local stop <== add sleep 5s)
+----------------------------------
+
+#USB API for theta
+#https://codetricity.github.io/theta-linux/usb_api/
+$ sudo apt install libusb-dev
+#download libptp2  https://sourceforge.net/projects/libptp/
+$ ./configure
+$ make
+$ sudo make install
+##The default location of the libptp install is /usr/local/lib.
+$ cd /etc/ld.so.conf.d/
+$ ls
+$ cat libc.conf
+##>> /usr/local/lib
+$ sudo /sbin/ldconfig -v
+-----------------------------------
+
+#install PiP
+#https://pcl.solima.net/pyblog/archives/57
+$ sudo apt install python3-pip
+
+-----------------
+boost python
+sudo apt install libboost-dev
+sudo apt install libboost-all-dev
+
+-------------
+install tornado
+pip install tornado
+pip3 install tornado
+
+--------------
+
+
+
+
+
+
+
+
+--------------------------------------------------------------
+
+#ROS (Ubuntu 18.04, distro melodic arm64) install
+
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+sudo apt install curl
+curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
+sudo apt update
+sudo apt install ros-melodic-desktop
+echo "source /opt/ros/melodic/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+sudo apt install python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential
+sudo rosdep init
+rosdep update
+pip3 install rosdep
+
+#Installing joystick for ROS
+
+sudo apt install ros-melodic-joystick-drivers
+sudo apt install ros-melodic-joy
+
+-------------------------------------------------------
+
+#Install joystick
+
+sudo apt install joystick
+sudo apt install jstest-gtk
+
+-----------------------------------------------------------------
+
+# OJIMA's segway-ros install
+
+!! Before installing segway-ros, you have to install "ROS" first!
+
+cd ~ && git clone https://github.com/OJIMA-YUKIYA/segway.git
+echo KERNEL==\"ttyUSB0\", ATTRS{idVendor}=\"0403\", ATTRS{idProduct}=\"e729\", MODE:=\"0666\", GROUP:=\"dialout\" > 38-SegwayRMP200-rules
+sudo mv 38-SegwayRMP200-rules /lib/udev/rules.d
+sudo usermod -a -G dialout tristar
+
+#compile
+
+cd ~/segway/
+./compile.sh
+
+#RUN
+
+cd ~/segway/
+./joystick_segway.sh
+
+------------------------------------------------
+
+#install librealsense
+https://github.com/IntelRealSense/librealsense/blob/master/doc/installation_jetson.md
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE || sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-key F6E65AC044F831AC80A06380C8B3A55A6F3EFCDE
+sudo add-apt-repository "deb https://librealsense.intel.com/Debian/apt-repo $(lsb_release -cs) main" -u
+sudo apt-get install librealsense2-utils
+sudo apt-get install librealsense2-dev
+
+---------------------------------------------------------
+
+#install realsense-ros
+
+#https://qiita.com/forestsignal/items/9e840956362d1c0be186
+sudo apt-get install ros-melodic-ddynamic-reconfigure
+sudo apt install ros-melodic-rtabmap-ros
+sudo apt install ros-melodic-rviz-map-plugin
+sudo apt install ros-melodic-octomap-rviz-plugins
+sudo apt install ros-melodic-octomap-ros
+
+mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws/src/
+git clone https://github.com/IntelRealSense/realsense-ros.git
+
+#compile
+cd ~/catkin_ws/
+catkin_make
+
+#If you encounter the following error, you should
+
+sudo cp -r /usr/include/opencv4 /usr/include/opencv
+
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+CMake Error at /opt/ros/melodic/share/cv_bridge/cmake/cv_bridgeConfig.cmake:113 (message):
+  Project 'cv_bridge' specifies '/usr/include/opencv' as an include dir,
+  which is not found.
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+
+------------------------------------------
+# Python RealSense
+
+cd ~
+git clone https://github.com/JetsonHacksNano/installLibrealsense.git
+cd installLibrealsense
+./installLibrealsense.sh
+./buildLibrealsense.sh
+# add ~.bashrc bellow
+export PYTHONPATH=$PYTHONPATH:/usr/local/lib/python3.6/pyrealsense2

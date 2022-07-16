@@ -1,0 +1,1 @@
+/usr/bin/c++    -rdynamic CMakeFiles/TwinCam.dir/TwinCamEpos.cpp.o  -o TwinCam -lEposCmd 
