@@ -29,8 +29,9 @@ def momo_serial_read_loop():
             time.sleep(2)
             print('try to open /home/tristar/MyWork-NX4_6/serial_out');
     while run:
-        data = readSerial.read(2)
-        setPos = np.array(np.array(data[1], dtype='int8')/127.0*2800, dtype='int32')
+        data = readSerial.read(3)
+        short_value = np.array((np.array(data[1], dtype='uint16') << 8) + np.array(data[2], dtype='uint16'), dtype='int16')
+        setPos = np.array(2800.0 * short_value / 32767.0, dtype='int32')
         print('read:', setPos)
         time.sleep(0)
 
