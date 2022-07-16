@@ -87,7 +87,7 @@ def openTHETA1():
 
 	print("end camera1")
 
-momoP0 = './momo-2022.2.0_ubuntu-18.04_armv8_jetson_xavier/momo --hw-mjpeg-decoder=false --resolution 4K --video-device /dev/video0 sora --signaling-url wss://sora.ikeilabsora.0am.jp/signaling --channel-id sora --multistream 1 --role sendonly --video-codec-type H264 --video-bit-rate 15000'
+momoP0 = './momo-2022.2.0_ubuntu-18.04_armv8_jetson_xavier/momo --hw-mjpeg-decoder=false --resolution 4K --video-device /dev/video0 mobile-twincam-right --signaling-url wss://sora.ikeilabsora.0am.jp/signaling --channel-id sora --multistream 1 --role sendonly --video-codec-type H264 --video-bit-rate 15000'
 # momoP0 = './momo-2021.6.0_ubuntu-18.04_armv8_jetson_xavier/momo --hw-mjpeg-decoder=false --resolution 4K --video-device /dev/video0 sora --signaling-url wss://207-148-92-89.stable.sora.sora-labo.shiguredo.app/signaling --channel-id OJIMA-YUKIYA@sora-devtools  --multistream 1 --role sendonly --metadata \'{\"signaling_key\": \"0mKFzDghLJNL7bmqa99hj4pp13IGaG_o4SHWdHoIKMzffpyZwQmo5dOIVi_9QBZ_\"}\' --video-codec-type H264 --video-bit-rate 15000'
 # momoP0 = './momo-2022.1.0_ubuntu-18.04_armv8_jetson_xavier/momo --hw-mjpeg-decoder=false --resolution 4K --use-sdl --show-me --video-device /dev/video0 sora --signaling-url wss://sora.ikeilabsora.0am.jp/signaling --channel-id twincam-left --multistream 1 --role sendonly --video-codec-type H264 --video-bit-rate 15000'
 # momoP0 = './momo-2022.1.0_ubuntu-18.04_armv8_jetson_xavier/momo --hw-mjpeg-decoder=false --resolution 4K --use-sdl --show-me --video-device /dev/video0 sora --signaling-url wss://sora.ikeilabsora.0am.jp/signaling --channel-id twincam-right --multistream 1 --role sendrecv --video-codec-type H264 --video-bit-rate 15000'
@@ -135,26 +135,26 @@ def momo1():
 #socat pty,echo=0,raw,link=./serial_out pty,raw,echo=0,link=./serial_in
 
 
-#if __name__ == '__main__':
-#theta0_Th = threading.Thread(target = openTHETA0)
-#theta0_Th.start()
-#time.sleep(6)
-#theta1_Th = threading.Thread(target = openTHETA1)
+# if __name__ == '__main__':
+# theta0_Th = threading.Thread(target = openTHETA0)
+# theta0_Th.start()
+# time.sleep(6)
+# theta1_Th = threading.Thread(target = openTHETA1)
 #theta1_Th.start()
 #time.sleep(3)
-#momo0_Th = threading.Thread(target = momo0)
-#momo0_Th.start()
-#time.sleep(2)
+# momo0_Th = threading.Thread(target = momo0)
+# momo0_Th.start()
+# time.sleep(2)
 #momo1_Th = threading.Thread(target = momo1)
 #momo1_Th.start()
-#mainRun = True
+# mainRun = True
 # res = requests.get('http://api.ipify.org/')
 # print('global IP', res.text)
 # oldIP = res.text
 # currentIP = oldIP
-#try:
-	#while mainRun:
-		#time.sleep(10)
+# try:
+# 	while mainRun:
+		# time.sleep(10)
 		# try:
 		# 	res = requests.get('http://api.ipify.org/')
 		# 	print('global IP', res.text)
@@ -172,13 +172,13 @@ def momo1():
 		# 	print('restart')
 		# 	momo0_Th = threading.Thread(target = momo0)
 		# 	momo0_Th.start()
-#except KeyboardInterrupt:
-	#runmomo0 = False
-	#runmomo1 = False
-	#time.sleep(2)
-
-	#runTheta0 = False
-	#runTheta1 = False
-	#time.sleep(2)
-	#mainRun = False
-	#print("------END--------Press Ctrl+C again if not end")
+# except KeyboardInterrupt:
+	# runmomo0 = False
+	# runmomo1 = False
+	# time.sleep(2)
+	#
+	# runTheta0 = False
+	# runTheta1 = False
+	# time.sleep(2)
+	# mainRun = False
+	# print("------END--------Press Ctrl+C again if not end")
