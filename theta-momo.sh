@@ -2,9 +2,11 @@
 sleep 3s
 cd /home/tristar/MyWork-NX4_6
 ./local_webrtc_momo.run
-sleep 3s;
+sleep 2s;
 ./twincam-i2c.py &
-sleep 7s
+sleep 2s;
+./twincam-i2c.py &
+sleep 6s
 /home/tristar/MyWork-NX4_6/wakeup_theta.py
 sleep 1s
 /home/tristar/MyWork-NX4_6/THETA_Cameras/camera0/gst_loopback &
