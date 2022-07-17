@@ -31,7 +31,7 @@ def momo_serial_read_loop():
     while run:
         data = readSerial.read(3)
         short_value = np.array((np.array(data[1], dtype='uint16') << 8) + np.array(data[2], dtype='uint16'), dtype='int16')
-        setPos = np.array(5600.0 * short_value / 32767.0, dtype='int32')
+        setPos = np.array(short_value, dtype='int32')
         print('read:', setPos)
         time.sleep(0)
 
