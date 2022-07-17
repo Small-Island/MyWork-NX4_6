@@ -30,7 +30,7 @@ def momo_serial_read_loop():
     while run:
         data = readSerial.read(3)
         short_value = np.array((np.array(data[1], dtype='uint16') << 8) + np.array(data[2], dtype='uint16'), dtype='int16')
-        setPos = np.array(short_value, dtype='int32')*5
+        setPos = np.array(short_value, dtype='int32')*2
         print('read:', setPos)
         time.sleep(0)
 
@@ -43,13 +43,16 @@ thread.start()
 
 while 1:
     try:
+        time.sleep(0.05)
         dataBytes[3] = setPos & 0xff
         dataBytes[2] = (setPos >> 8) & 0xff
         dataBytes[1] = (setPos >> 16) & 0xff
         dataBytes[0] = (setPos >> 24) & 0xff
+        print('write')
         i2cbus.write_i2c_block_data(arudino, 0, dataBytes) # Write a byte to address "arudino" from offset 0
         rdata = i2cbus.read_i2c_block_data(arudino, 1, 4)  # Returned value is a list of 4 bytes
         getPos = int.from_bytes(rdata, byteorder = 'big', signed = 'true')
+        print('getPos', getPos)
         if getPos != lstPos:
             print("actual position" , getPos, "set position", setPos)
             lstPos = getPos

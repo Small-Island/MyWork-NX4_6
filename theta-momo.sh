@@ -1,5 +1,5 @@
 #!/bin/bash
-sleep 3s
+sleep 7s
 cd /home/tristar/MyWork-NX4_6
 ./local_webrtc_momo.run
 sleep 2s;
