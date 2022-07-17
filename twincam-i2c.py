@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 from smbus2 import SMBus
-import numpy
 import time
 arudino = 0x23  # i2cdetect -r -y 8
 i2cbus = SMBus(8)
@@ -31,7 +30,7 @@ def momo_serial_read_loop():
     while run:
         data = readSerial.read(3)
         short_value = np.array((np.array(data[1], dtype='uint16') << 8) + np.array(data[2], dtype='uint16'), dtype='int16')
-        setPos = np.array(short_value, dtype='int32')
+        setPos = np.array(short_value, dtype='int32')*5
         print('read:', setPos)
         time.sleep(0)
 
