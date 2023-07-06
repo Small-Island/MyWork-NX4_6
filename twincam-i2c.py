@@ -50,6 +50,7 @@ def momo_serial_read_loop():
         readSerial.write(data[1]);
         readSerial.write(data[2]);
         readSerial.write('\n');
+        #local_setPos = np.array(short_value, dtype='int32')*2
         if local_setPos > 1400:
             local_setPos = 1400
         if local_setPos < -1400:
