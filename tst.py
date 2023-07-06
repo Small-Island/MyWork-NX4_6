@@ -27,8 +27,23 @@ def momo_serial_read_loop():
             print('try to open /home/tristar/MyWork-NX4_6/serial_out');
     while run:
         data = readSerial.read(3)
+        if data[0] == 0xe0:
+            print('header 0xe0 ', end='')
+        elif data[1] == 0xe0:
+            print('header 0xe0 at index 1')
+            readSerial.read(1)
+            continue
+        elif data[2] == 0xe0:
+            print('header 0xe0 at index 2')
+            readSerial.read(2)
+            continue
         short_value = np.array((np.array(data[1], dtype='uint16') << 8) + np.array(data[2], dtype='uint16'), dtype='int16')
-        setPos = np.array(short_value, dtype='int32')*5
+        local_setPos = np.array(short_value, dtype='int32')*2
+        if local_setPos > 1400:
+            local_setPos = 1400
+        if local_setPos < -1400:
+            local_setPos = -1400
+        setPos = local_setPos
         print('read:', setPos)
         time.sleep(0)
 
@@ -44,7 +59,6 @@ while 1:
         time.sleep(10);
 
     except KeyboardInterrupt :
-        i2cbus.close()
         run = False
         thread.join()
         print("end loop")

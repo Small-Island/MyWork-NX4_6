@@ -28,9 +28,33 @@ def momo_serial_read_loop():
             time.sleep(2)
             print('try to open /home/tristar/MyWork-NX4_6/serial_out');
     while run:
+        # data = readSerial.read(3)
+        # short_value = np.array((np.array(data[1], dtype='uint16') << 8) + np.array(data[2], dtype='uint16'), dtype='int16')
+        # setPos = np.array(short_value, dtype='int32')*2
+        # print('read:', setPos)
+        # time.sleep(0)
+        
         data = readSerial.read(3)
+        if data[0] == 0xe0:
+            print('header 0xe0 ', end='')
+        elif data[1] == 0xe0:
+            print('header 0xe0 at index 1')
+            readSerial.read(1)
+            continue
+        elif data[2] == 0xe0:
+            print('header 0xe0 at index 2')
+            readSerial.read(2)
+            continue
         short_value = np.array((np.array(data[1], dtype='uint16') << 8) + np.array(data[2], dtype='uint16'), dtype='int16')
-        setPos = np.array(short_value, dtype='int32')*5
+        local_setPos = np.array(short_value, dtype='int32')
+        readSerial.write(data[1]);
+        readSerial.write(data[2]);
+        readSerial.write('\n');
+        if local_setPos > 1400:
+            local_setPos = 1400
+        if local_setPos < -1400:
+            local_setPos = -1400
+        setPos = local_setPos
         print('read:', setPos)
         time.sleep(0)
 
@@ -43,13 +67,16 @@ thread.start()
 
 while 1:
     try:
+        time.sleep(0.05)
         dataBytes[3] = setPos & 0xff
         dataBytes[2] = (setPos >> 8) & 0xff
         dataBytes[1] = (setPos >> 16) & 0xff
         dataBytes[0] = (setPos >> 24) & 0xff
+        print('write')
         i2cbus.write_i2c_block_data(arudino, 0, dataBytes) # Write a byte to address "arudino" from offset 0
         rdata = i2cbus.read_i2c_block_data(arudino, 1, 4)  # Returned value is a list of 4 bytes
         getPos = int.from_bytes(rdata, byteorder = 'big', signed = 'true')
+        print('getPos', getPos)
         if getPos != lstPos:
             print("actual position" , getPos, "set position", setPos)
             lstPos = getPos

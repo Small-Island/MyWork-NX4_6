@@ -1,5 +1,6 @@
 const debug = true;
 // const sora = Sora.connection("wss://207-148-92-89.stable.sora.sora-labo.shiguredo.app/signaling", debug);
+//const sora = Sora.connection("ws://192.168.11.64:5000/signaling", debug);
 const sora = Sora.connection("wss://sora.ikeilabsora.0am.jp/signaling", debug);
 // const channelId = "OJIMA-YUKIYA@sora-devtools";
 const channelId = "robots-control";
@@ -203,20 +204,8 @@ function prepareNewConnection() {
   peer.addTransceiver('audio', {direction: 'recvonly'});
 
   dataChannel.onmessage = function (event) {
-      if (event.data.byteLength == 19) {
-        recvonly.sendMessage('#sora-devtools', event.data);
-        let vel_time = (new Int32Array([new Uint8Array(event.data)[0] << 24])[0] + new Int32Array([new Uint8Array(event.data)[1] << 16])[0] + new Int32Array([new Uint8Array(event.data)[2] << 8])[0] + new Int32Array([ new Uint8Array(event.data)[3]])[0] )/1000.0;
-        let lin_vel = (new Int32Array([new Uint8Array(event.data)[4] << 24])[0] + new Int32Array([ new Uint8Array(event.data)[5] << 16 ])[0] + new Int32Array([new Uint8Array(event.data)[6] << 8])[0] + new Int32Array([ new Uint8Array(event.data)[7]])[0] )/10000.0;
-        let ang_vel = (new Int32Array([new Uint8Array(event.data)[8] << 24])[0] + new Int32Array([ new Uint8Array(event.data)[9] << 16 ])[0] + new Int32Array([new Uint8Array(event.data)[10] << 8])[0] + new Int32Array([ new Uint8Array(event.data)[11]])[0] )/10000.0;
-        let latch = new Uint8Array(event.data)[12];
-        let turn_position = (new Int16Array([new Uint8Array(event.data)[13] << 8])[0] + new Int16Array([ new Uint8Array(event.data)[14]])[0] )/100.0;
-        let position_x = (new Int16Array([new Uint8Array(event.data)[15] << 8])[0] + new Int16Array([ new Uint8Array(event.data)[16]])[0] )/100.0;
-        let position_z = (new Int16Array([new Uint8Array(event.data)[17] << 8])[0] + new Int16Array([ new Uint8Array(event.data)[18]])[0] )/100.0;
-
-        document.getElementById("sgss").innerHTML = 'latch ' + latch + '\nturn position(deg) ' + turn_position + '\nposition x(m) ' + position_x + '\nposition z(m) ' + position_z  + '\n時刻(s) ' + vel_time + '\n並進速度(m/s) ' + lin_vel + '\n旋回速度(deg/s)' + ang_vel;
-        if (log_latch) {
-          real_velocity_logData = real_velocity_logData + vel_time + ' ' + lin_vel + ' ' + ang_vel + '\n';
-        }
+      if (event.data.byteLength == 2) {
+         sora.sendMessage("#sora-devtools",event.data);
       }
   };
 

@@ -1,3 +1,5 @@
+prometheus/
+analysis_system/
+webrtc_log*
 serial_out
-serial_in
-webrtc_logs*
+*.mp4

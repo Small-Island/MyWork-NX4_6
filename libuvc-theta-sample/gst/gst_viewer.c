@@ -192,8 +192,11 @@ main(int argc, char **argv)
 		cmd_name++;
 
 	if (strcmp(cmd_name, "gst_loopback") == 0) {
-		pipe_proc = "decodebin ! autovideoconvert ! "
-			"video/x-raw,format=I420 ! identity drop-allocation=true !"
+		// pipe_proc = "decodebin ! autovideoconvert ! "
+		//	"video/x-raw,format=I420 ! identity drop-allocation=true !"
+		//	"v4l2sink device=/dev/video0 sync=false";
+                pipe_proc = "nvv4l2decoder ! "
+			"nvvidconv ! video/x-raw,format=I420 ! identity drop-allocation=true !"
 			"v4l2sink device=/dev/video0 sync=false";
 	}
 	else {

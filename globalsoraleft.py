@@ -84,7 +84,7 @@ def openTHETA1():
 
 	print("end camera1")
 
-momoP0 = './momo-2022.2.0_ubuntu-18.04_armv8_jetson_xavier/momo --hw-mjpeg-decoder=false --resolution 4K --video-device /dev/video0 sora --signaling-url wss://sora.ikeilabsora.0am.jp/signaling --channel-id twincam-left --multistream 1 --role sendrecv --video-codec-type H264 --video-bit-rate 15000'
+momoP0 = './momo-2022.2.0_ubuntu-18.04_armv8_jetson_xavier/momo --hw-mjpeg-decoder=false --resolution 4K --video-device /dev/video0 sora --signaling-url wss://sora.ikeilabsora.0am.jp/signaling --channel-id mobile-twincam-left --multistream 1 --role sendrecv --video-codec-type H264 --video-bit-rate 15000'
 # momoP0 = './momo-2021.6.0_ubuntu-18.04_armv8_jetson_xavier/momo --hw-mjpeg-decoder=false --resolution 4K --video-device /dev/video0 sora --signaling-url wss://207-148-92-89.stable.sora.sora-labo.shiguredo.app/signaling --channel-id OJIMA-YUKIYA@sora-devtools  --multistream 1 --role sendonly --metadata \'{\"signaling_key\": \"0mKFzDghLJNL7bmqa99hj4pp13IGaG_o4SHWdHoIKMzffpyZwQmo5dOIVi_9QBZ_\"}\' --video-codec-type H264 --video-bit-rate 15000'
 # momoP0 = './momo-2022.1.0_ubuntu-18.04_armv8_jetson_xavier/momo --hw-mjpeg-decoder=false --resolution 4K --use-sdl --show-me --video-device /dev/video0 sora --signaling-url wss://sora.ikeilabsora.0am.jp/signaling --channel-id twincam-left --multistream 1 --role sendonly --video-codec-type H264 --video-bit-rate 15000'
 # momoP0 = './momo-2022.1.0_ubuntu-18.04_armv8_jetson_xavier/momo --hw-mjpeg-decoder=false --resolution 4K --use-sdl --show-me --video-device /dev/video0 sora --signaling-url wss://sora.ikeilabsora.0am.jp/signaling --channel-id twincam-left --multistream 1 --role sendrecv --video-codec-type H264 --video-bit-rate 15000'

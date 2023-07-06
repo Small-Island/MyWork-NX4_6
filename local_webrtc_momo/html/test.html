@@ -156,6 +156,7 @@
                 if (dataChannel) {
                     if (dataChannel.readyState == 'open') {
                         dataChannel.send(event.data);
+                        document.getElementById("sgvs").innerHTML = new Int16Array([(new Uint8Array(event.data)[1] << 8) + new Uint8Array(event.data)[2]])[0];
                     }
                     else {
                         connect();
